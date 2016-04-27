@@ -87,6 +87,9 @@ getPass <- function(msg="PASSWORD: ", forcemask=FALSE)
 #' is not supported? If \code{FALSE}, the function will default
 #' to use \code{readline()} with a warning message that the
 #' input is not masked, and otherwise will stop with an error.
+#' @param auto
+#' Logical; should the function decide which method to use for
+#' password entry, or should it just use the terminal.
 #' 
 #' @return
 #' If input is provided, then that is returned. If the user cancels
@@ -122,7 +125,10 @@ getPass2 <- function(msg="PASSWORD: ", forcemask=FALSE, auto=TRUE)
     else
       stop("Masking is not supported on your platform!")
   } else {
-    pw <- readline_masked_term(msg, showstars=TRUE)
+    if (isaterm())
+      pw <- readline_masked_term(msg, showstars=TRUE)
+    else 
+      stop("Masking is not supported on your platform!")
   }
   
   pw
